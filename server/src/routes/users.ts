@@ -3,17 +3,16 @@ import pool from "../config/pool.js";
 
 const router = express.Router();
 
-type User = {
-  id?: number;
+type UserData = {
   username: string;
   password: string;
 };
 
 router.get("/login", async (req: Request, res: Response) => {
   try {
-    const sumbittedData: User = req.body;
+    const sumbittedData: UserData = req.body;
 
-    const results = await pool.query<User>(
+    const results = await pool.query<UserData>(
       "SELECT * FROM users WHERE username = $1 AND password = $2",
       [sumbittedData.username, sumbittedData.password],
     );
@@ -31,8 +30,29 @@ router.get("/login", async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-        message: "There was a problem logging you in.",
-        status: false,
+      message: "There was a problem logging you in.",
+      status: false,
+    });
+  }
+});
+
+router.post("/signup", async (req: Request, res: Response) => {
+  try {
+    const submittedData: UserData = req.body;
+
+    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2);", [
+        submittedData.username,
+        submittedData.password,
+    ]);
+
+    res.status(201).json({
+        message: "Account created!",
+        status: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "There was a problem creating your account.",
+      status: false,
     });
   }
 });

@@ -23,5 +23,24 @@ router.get("/login", async (req, res) => {
         });
     }
 });
+router.post("/signup", async (req, res) => {
+    try {
+        const submittedData = req.body;
+        await pool.query("INSERT INTO users (username, password) VALUES ($1, $2);", [
+            submittedData.username,
+            submittedData.password,
+        ]);
+        res.status(201).json({
+            message: "Account created!",
+            status: true,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: "There was a problem creating your account.",
+            status: false,
+        });
+    }
+});
 export default router;
 //# sourceMappingURL=users.js.map
