@@ -49,7 +49,7 @@ export default function LogInPage() {
 
   return (
     <main className="h-screen flex justify-center items-center bg-blue-200 p-5">
-      <form onSubmit={formState === "login" ? logIn : signUp} className="flex justify-center items-center">
+      <form onSubmit={formState === "login" ? logIn : signUp} className="flex justify-center items-center animate-setup">
         <LogIn 
           formState={formState}
           setFormState={setFormState}

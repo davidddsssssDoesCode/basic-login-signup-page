@@ -1,8 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-    --animate-hide: hide 1.2s ease-in-out 1 forwards;
-    --animate-show: show 1.2s ease-in-out 1 forwards;
+    --animate-setup: setup 1.2s ease-in-out 1 forwards;
+    --animate-hide: hide 1s ease-in-out 1 forwards;
+    --animate-show: show 1s ease-in-out 1 forwards;
+
+    @keyframes setup {
+        0% {
+            transform: translateY(-100vw);
+        }
+
+        75% {transform: translateY(10vw)}
+
+        100% {
+            transform: translateY(0);
+            position: absolute;
+        }
+    }
 
     @keyframes hide {
         0% {
