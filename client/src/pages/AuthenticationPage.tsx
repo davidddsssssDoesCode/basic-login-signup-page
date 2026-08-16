@@ -1,6 +1,7 @@
 import {useState} from "react";
 import LogIn from "../components/AuthPage/LogIn";
 import SignUp from "../components/AuthPage/SignUp";
+import {authLogIn, authSignUp} from "../apis/AuthAPI";
 
 export default function LogInPage() {
   const [formState, setFormState] = useState<string>("login");
@@ -10,17 +11,23 @@ export default function LogInPage() {
   const [newPasswordInput, setNewPasswordInput] = useState<string>("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
 
-  function logIn(e: React.SubmitEvent<HTMLFormElement>) {
+  async function logIn(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (usernameInput === "" || passwordInput === "") {
       return alert("Username and/or Password is invalid.");
     }
 
-    alert("Yay!");
+    try {
+      const response = await authLogIn(usernameInput, passwordInput);
+
+      return console.log(response);
+    } catch (error) {
+      return console.log("There was an error logging you in.");
+    }
   }
 
-  function signUp(e: React.SubmitEvent<HTMLFormElement>) {
+  async function signUp(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (newUsernameInput === "" || newPasswordInput === "" || confirmPasswordInput === "") {
@@ -31,7 +38,13 @@ export default function LogInPage() {
       return alert("Passwords do not match.");
     }
 
-    alert("Yay!");
+    try {
+      const response = await authSignUp(newUsernameInput, newPasswordInput);
+
+      return console.log(response);
+    } catch (error ) {
+      return console.log("There was an error in creating an account.");
+    }
   }
 
   return (

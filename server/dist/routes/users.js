@@ -1,7 +1,7 @@
 import express, {} from "express";
 import pool from "../config/pool.js";
 const router = express.Router();
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
     try {
         const sumbittedData = req.body;
         const results = await pool.query("SELECT * FROM users WHERE username = $1 AND password = $2", [sumbittedData.username, sumbittedData.password]);
