@@ -10,12 +10,19 @@ export default function LogInPage() {
   const [newUsernameInput, setNewUsernameInput] = useState<string>("");
   const [newPasswordInput, setNewPasswordInput] = useState<string>("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
+  
+  const [loginInputErrorStatus, setLoginInputErrorStatus] = useState<boolean>(false);
+  const [loginInputErrorMessage, setLoginInputErrorMessage] = useState<string>("");
+  const [signupInputErrorStatus, setSignupInputErrorStatus] = useState<boolean>(false);
+  const [signupInputErrorMessage, setSignupInputErrorMessage] = useState<string>("");
 
   async function logIn(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (usernameInput === "" || passwordInput === "") {
-      return alert("Username and/or Password is invalid.");
+      setLoginInputErrorStatus(true);
+      setLoginInputErrorMessage("There are missing fields.");
+      return;
     }
 
     try {
@@ -23,7 +30,9 @@ export default function LogInPage() {
 
       return console.log(response);
     } catch (error) {
-      return console.log("There was an error logging you in.");
+      setLoginInputErrorStatus(true);
+      setLoginInputErrorMessage("There was a problem logging you in.");
+      return;
     }
   }
 
@@ -31,11 +40,15 @@ export default function LogInPage() {
     e.preventDefault();
 
     if (newUsernameInput === "" || newPasswordInput === "" || confirmPasswordInput === "") {
-      return alert("Some fields are not filled.");
+      setSignupInputErrorStatus(true);
+      setSignupInputErrorMessage("There are missing fields.");
+      return;
     }
 
     if (newPasswordInput !== confirmPasswordInput) {
-      return alert("Passwords do not match.");
+      setSignupInputErrorStatus(true);
+      setSignupInputErrorMessage("Passwords do not match.");
+      return;
     }
 
     try {
@@ -43,7 +56,9 @@ export default function LogInPage() {
 
       return console.log(response);
     } catch (error ) {
-      return console.log("There was an error in creating an account.");
+      setSignupInputErrorStatus(true);
+      setSignupInputErrorMessage("There was a problem making an account.");
+      return;
     }
   }
 
@@ -55,6 +70,8 @@ export default function LogInPage() {
           setFormState={setFormState}
           setUsernameInput={setUsernameInput}
           setPasswordInput={setPasswordInput}
+          loginInputErrorStatus={loginInputErrorStatus}
+          loginInputErrorMessage={loginInputErrorMessage}
         />
         <SignUp
           formState={formState}
@@ -62,6 +79,8 @@ export default function LogInPage() {
           setNewUsernameInput={setNewUsernameInput}
           setNewPasswordInput={setNewPasswordInput}
           setConfirmPasswordInput={setConfirmPasswordInput}
+          signupInputErrorStatus={signupInputErrorStatus}
+          signupInputErrorMessage={signupInputErrorMessage}
         />
       </form>
     </main>
