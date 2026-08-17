@@ -10,11 +10,15 @@ export default function LogInPage() {
   const [newUsernameInput, setNewUsernameInput] = useState<string>("");
   const [newPasswordInput, setNewPasswordInput] = useState<string>("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
-  
-  const [loginInputErrorStatus, setLoginInputErrorStatus] = useState<boolean>(false);
-  const [loginInputErrorMessage, setLoginInputErrorMessage] = useState<string>("");
-  const [signupInputErrorStatus, setSignupInputErrorStatus] = useState<boolean>(false);
-  const [signupInputErrorMessage, setSignupInputErrorMessage] = useState<string>("");
+
+  const [loginInputErrorStatus, setLoginInputErrorStatus] =
+    useState<boolean>(false);
+  const [loginInputErrorMessage, setLoginInputErrorMessage] =
+    useState<string>("");
+  const [signupInputErrorStatus, setSignupInputErrorStatus] =
+    useState<boolean>(false);
+  const [signupInputErrorMessage, setSignupInputErrorMessage] =
+    useState<string>("");
 
   async function logIn(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,7 +32,13 @@ export default function LogInPage() {
     try {
       const response = await authLogIn(usernameInput, passwordInput);
 
-      return console.log(response);
+      if (!response.status) {
+        setLoginInputErrorStatus(true);
+        setLoginInputErrorMessage("Username and/or password is invalid.");
+        return;
+      }
+
+      return alert(response.message);
     } catch (error) {
       setLoginInputErrorStatus(true);
       setLoginInputErrorMessage("There was a problem logging you in.");
@@ -39,7 +49,11 @@ export default function LogInPage() {
   async function signUp(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (newUsernameInput === "" || newPasswordInput === "" || confirmPasswordInput === "") {
+    if (
+      newUsernameInput === "" ||
+      newPasswordInput === "" ||
+      confirmPasswordInput === ""
+    ) {
       setSignupInputErrorStatus(true);
       setSignupInputErrorMessage("There are missing fields.");
       return;
@@ -54,8 +68,9 @@ export default function LogInPage() {
     try {
       const response = await authSignUp(newUsernameInput, newPasswordInput);
 
-      return console.log(response);
-    } catch (error ) {
+      if (!response.status) {
+      }
+    } catch (error) {
       setSignupInputErrorStatus(true);
       setSignupInputErrorMessage("There was a problem making an account.");
       return;
@@ -64,8 +79,11 @@ export default function LogInPage() {
 
   return (
     <main className="h-screen flex justify-center items-center bg-blue-200 p-5">
-      <form onSubmit={formState === "login" ? logIn : signUp} className="flex justify-center items-center animate-setup">
-        <LogIn 
+      <form
+        onSubmit={formState === "login" ? logIn : signUp}
+        className="flex justify-center items-center animate-setup"
+      >
+        <LogIn
           formState={formState}
           setFormState={setFormState}
           setUsernameInput={setUsernameInput}

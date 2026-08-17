@@ -3,16 +3,16 @@ import pool from "../config/pool.js";
 const router = express.Router();
 router.post("/login", async (req, res) => {
     try {
-        const sumbittedData = req.body;
-        const results = await pool.query("SELECT * FROM users WHERE username = $1 AND password = $2", [sumbittedData.username, sumbittedData.password]);
+        const submittedData = req.body;
+        const results = await pool.query("SELECT * FROM users WHERE username = $1 AND password = $2", [submittedData.username, submittedData.password]);
         if (results.rowCount === 0) {
-            return res.status(404).json({
+            return res.status(200).json({
                 message: "Username and/or password is invalid.",
                 status: false,
             });
         }
         res.status(200).json({
-            message: "Logging you in...",
+            message: `Welcome, ${submittedData.username}!`,
             status: true,
         });
     }
@@ -31,7 +31,7 @@ router.post("/signup", async (req, res) => {
             submittedData.password,
         ]);
         res.status(201).json({
-            message: "Account created!",
+            message: `Welcome, ${submittedData.username}`,
             status: true,
         });
     }

@@ -10,22 +10,22 @@ type UserData = {
 
 router.post("/login", async (req: Request, res: Response) => {
   try {
-    const sumbittedData: UserData = req.body;
+    const submittedData: UserData = req.body;
 
     const results = await pool.query<UserData>(
       "SELECT * FROM users WHERE username = $1 AND password = $2",
-      [sumbittedData.username, sumbittedData.password],
+      [submittedData.username, submittedData.password],
     );
 
     if (results.rowCount === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Username and/or password is invalid.",
         status: false,
       });
     }
 
     res.status(200).json({
-      message: "Logging you in...",
+      message: `Welcome, ${submittedData.username}!`,
       status: true,
     });
   } catch (error) {
@@ -46,7 +46,7 @@ router.post("/signup", async (req: Request, res: Response) => {
     ]);
 
     res.status(201).json({
-        message: "Account created!",
+        message: `Welcome, ${submittedData.username}`,
         status: true,
     });
   } catch (error) {
